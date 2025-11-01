@@ -16,8 +16,18 @@ class Game:
         player_voted_out = max(votes, key=votes.get)
         self.gameState[player_voted_out][1] = False
 
+
+    def gamePlay(self):
+        agent1 = a("", "", )
+
     def play_round(self, response: msg):
-        message = response.
+        responseMessage = response.content
+        senderId = response.id
+        responseContent = response.content
+        responseType = response.type
+        responseSender = response.sender
+
+        for
 
 
 
