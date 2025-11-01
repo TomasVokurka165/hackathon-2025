@@ -32,7 +32,7 @@ The player’s goal: **convince them that they too are a historical figure**.
 5. Model returns the AI agent’s reply.
 6. Flask sends the reply back to the frontend, which displays it in the chat window.
 
-> **Note:** Each AI agent currently does not maintain conversation memory. Multi-turn memory can be added later using Redis or in-memory storage, iF We hAvE tImEeeeEeEEe :(
+> **Note:** Each AI agent currently does not maintain conversation memory. Multi-turn memory can be added later using Redis or in-memory storage, iF We hAvE tImEeeeEeEEe (screams internally) :(
 
 ---
 
@@ -41,7 +41,7 @@ The player’s goal: **convince them that they too are a historical figure**.
 ### Clone & Install
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/TomasVokurka165/hackathon-2025.git
 cd deception-game
 python -m venv venv
 ```
