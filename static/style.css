@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f4ef;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 600px;
+  margin-top: 40px;
+}
+
+h1 {
+  text-align: center;
+  color: #4a2c2a;
+}
+
+.chat-box {
+  border: 2px solid #4a2c2a;
+  border-radius: 8px;
+  padding: 15px;
+  height: 400px;
+  overflow-y: auto;
+  background-color: #fffaf0;
+}
+
+.message {
+  margin: 8px 0;
+}
+
+.user {
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+.agent {
+  color: #a52a2a;
+  font-weight: bold;
+}
+
+.input-area {
+  display: flex;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  background-color: #a52a2a;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #7c1f1b;
+}
