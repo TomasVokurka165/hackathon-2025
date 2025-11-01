@@ -4,23 +4,54 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bridging Worlds: Deception Game</title>
+    <title>Beat the AI Agents</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
 <body>
+
+    <!-- Onboarding Modal -->
+    <div id="onboardingModal">
+        <div class="modal-content">
+            <!-- Step 1: Nickname -->
+            <div id="nicknameStep" class="step">
+                <h2>Enter Your Nickname</h2>
+                <input type="text" id="nicknameInput" placeholder="Type your nickname..." />
+                <br /><br />
+                <button onclick="submitNickname()">Continue</button>
+            </div>
+
+            <!-- Step 2: Ready? -->
+            <div id="readyStep" class="step hidden">
+                <p id="readyText"></p>
+                <div style="margin-top: 20px;">
+                    <button onclick="startGame('yes')">Yeahhh 💪</button>
+                    <button onclick="startGame('scared')">I guess so 😅</button>
+                    <button onclick="declineGame()">Nah</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Persona Selection -->
+            <div id="personaStep" class="step hidden">
+                <h3>Choose Your Agent Persona</h3>
+                <div class="persona-grid">
+                    <button class="persona-btn" onclick="choosePersona('Ada Lovelace')">Ada Lovelace</button>
+                    <button class="persona-btn" onclick="choosePersona('Nikola Tesla')">Nikola Tesla</button>
+                    <button class="persona-btn" onclick="choosePersona('Leonardo Da Vinci')">Leonardo Da Vinci</button>
+                    <button class="persona-btn" onclick="choosePersona('Cleopatra')">Cleopatra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat Container -->
     <div class="container">
-        <h1>Bridging Worlds: Deception Game</h1>
+        <h1>Beat the AI Agents 🤖</h1>
+
         <div id="chat" class="chat-box"></div>
 
         <div class="input-area">
-            <select id="agentSelect">
-                <option value="ada">Ada Lovelace</option>
-                <option value="tesla">Nikola Tesla</option>
-                <option value="leonardo">Leonardo da Vinci</option>
-                <option value="cleopatra">Cleopatra</option>
-            </select>
-            <input type="text" id="userInput" placeholder="Type your message..." />
+            <input id="userInput" type="text" placeholder="Type your message..." />
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
