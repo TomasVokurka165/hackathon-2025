@@ -35,18 +35,27 @@ The player’s goal: **convince them they’re also a historical figure**.
 git clone <your-repo-url>
 cd deception-game
 pip install -r requirements.txt
+```
 
-## 2️⃣ Create .env file
+### 2️⃣ Create .env file
+
+```bash
 DO_API_KEY=<digitalocean_api_key>
 DO_MODEL_URL=<model_endpoint_url>
 MODEL_NAME=gpt-4o-mini
 TALKJS_APP_ID=<talkjs_app_id>
 TALKJS_API_KEY=<talkjs_api_key>
 REDIS_URL=redis://localhost:6379/0
+```
 
-## 3️⃣ Run Flask App
+### 3️⃣ Run Flask App
+
+```bash
 python app.py
+```
 
-## 4️⃣ Expose Locally (for TalkJS Webhooks)
+### 4️⃣ Expose Locally (for TalkJS Webhooks)
+
+```bash
 ngrok http 8000
 ```
