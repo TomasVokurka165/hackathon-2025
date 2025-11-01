@@ -15,5 +15,3 @@ class Game:
     def update_voted_out(self, votes: Dict[str, int]):
         player_voted_out = max(votes, key=votes.get)
         self.gameState[player_voted_out][1] = False
-
-
