@@ -1,5 +1,6 @@
+/* ---------- General Layout ---------- */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Poppins", sans-serif;
   background-color: #f9f4ef;
   margin: 0;
   padding: 0;
@@ -13,64 +14,181 @@ body {
   width: 90%;
   max-width: 600px;
   margin-top: 40px;
+  background: #fffaf0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
+/* ---------- Title ---------- */
 h1 {
   text-align: center;
   color: #4a2c2a;
+  background-color: #ffe4c4;
+  padding: 15px;
+  margin: 0;
+  font-size: 1.8rem;
 }
 
+/* ---------- Chat Box ---------- */
 .chat-box {
-  border: 2px solid #4a2c2a;
-  border-radius: 8px;
+  border-top: 2px solid #4a2c2a;
   padding: 15px;
-  height: 400px;
+  height: 300px;
   overflow-y: auto;
-  background-color: #fffaf0;
+  background-color: #fff;
 }
 
 .message {
-  margin: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  margin: 10px 0;
 }
 
-.user {
-  color: #1a73e8;
+.message.user {
+  flex-direction: row-reverse;
+}
+
+.message.system {
+  justify-content: center;
+  color: #5a4031;
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* ---------- Avatar ---------- */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #a52a2a;
+  color: white;
   font-weight: bold;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  flex-shrink: 0;
 }
 
-.agent {
-  color: #a52a2a;
-  font-weight: bold;
+/* ---------- Message Bubbles ---------- */
+.bubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  line-height: 1.4;
 }
 
+.user .bubble {
+  background-color: #dceefc;
+  color: #1a1a1a;
+  border-bottom-right-radius: 4px;
+}
+
+.agent .bubble {
+  background-color: #f6d5c2;
+  color: #4a2c2a;
+  border-bottom-left-radius: 4px;
+}
+
+.system {
+  text-align: center;
+  padding: 5px 0;
+}
+
+/* ---------- Input Area ---------- */
 .input-area {
   display: flex;
-  margin-top: 10px;
-  gap: 5px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background-color: #fff0e1;
+  border-top: 2px solid #4a2c2a;
 }
 
 input[type="text"] {
   flex: 1;
-  padding: 8px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-}
-
-select {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 button {
-  padding: 8px 12px;
-  border-radius: 5px;
+  padding: 10px 16px;
+  border-radius: 8px;
   border: none;
   background-color: #a52a2a;
-  color: #fff;
+  color: white;
   cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
 }
 
 button:hover {
+  background-color: #7c1f1b;
+}
+
+/* ---------- Typing Animation ---------- */
+.typing .bubble {
+  background-color: #f6d5c2;
+  color: #4a2c2a;
+  font-style: italic;
+}
+
+.typing .bubble::after {
+  content: "⏳ thinking...";
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* ---------- Onboarding Modal ---------- */
+#onboardingModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.modal-content {
+  background: #fffaf0;
+  border-radius: 12px;
+  padding: 25px 30px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+  display: none;
+}
+
+.persona-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.persona-btn {
+  background-color: #a52a2a;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.persona-btn:hover {
   background-color: #7c1f1b;
 }
