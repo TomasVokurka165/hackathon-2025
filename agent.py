@@ -1,9 +1,15 @@
 import json
 import random
+from openai import OpenAI
+
+
+
 class Agent:
-    def __init__(self, agent_id, current_figure, nerves):
+    def __init__(self, id, agent_endpoint, agent_access_key, current_figure, nerves):
+        self.id = id
         self.suspicionDictionary = {}
-        self.id = agent_id
+        self.endpoint = agent_endpoint
+        self.access_key = agent_access_key
         self.currentFigure = current_figure
         self.nerves = nerves
 
@@ -20,7 +26,21 @@ class Agent:
             self.suspicionDictionary[otherIds] = [0, ""]
 
     def get_response(self, message):
-        return "response"
+        # Connect to the Agent.
+        client = OpenAI(
+            base_url = self.endpoint,
+            api_key = self.access_key,
+        )
+
+        # Create a chat with the agent, storing its response.
+        response = client.chat.completions.create(
+            model = "n/a",
+            messages= [{"role": "user", "content": f"{message}"}]
+        )
+
+        # Getting the content of the response.
+        resp = response.choices[0].message.content
+        return resp
 
     def check_suspicion(self, sus_id, message):
         susValue = 0
@@ -35,3 +55,4 @@ class Agent:
         players = list(self.suspicionDictionary.keys())
         weights = list(self.suspicionDictionary.values())[0]
         return random.choices(players, weights=weights, k=1)[0]
+
