@@ -31,7 +31,7 @@ class Agent:
     def generate_question(self, other_id, sus_level):
         return "question"
 
-    def choose_player(self, sus_level):
+    def choose_player(self):
         players = list(self.suspicionDictionary.keys())
         weights = list(self.suspicionDictionary.values())[0]
         return random.choices(players, weights=weights, k=1)[0]
