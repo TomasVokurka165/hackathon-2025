@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Load environment variables
 DO_API_KEY = os.getenv("DO_API_KEY", "")
 DO_MODEL_URL = os.getenv("DO_MODEL_URL", "")
-MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
+MODEL_NAME = os.getenv("MODEL_NAME", "OpenAI GPT-oss-120b")
 
 @app.route("/")
 def index():
