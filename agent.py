@@ -1,13 +1,17 @@
 import json
-import random
+import random, os
 from openai import OpenAI
 import pydo as pd
 import re
+from dotenv import load_dotenv
 
-# These are just exerimental, can be changed easily with new prompts for final product.
+load_dotenv()
+# These are just experimental, can be changed easily with new prompts for final product.
 # 0 - Thomas Jefferson
 # 1 - MLK
 # 2 - Einstein
+DO_API_KEY = os.getenv("DO_API_KEY")
+
 converter = {
     99: ["Host", ""],
     0: ["Thomas Jefferson", """
@@ -132,12 +136,14 @@ converter = {
         """]
 }
 
-AGENT_KEYS = {
-    0: ["https://awmc2b5zi5cltaseweuegscu.agents.do-ai.run/api/v1", "6SWrCFxCYUleR-gxE_42SMpOethEXU2S", "546ece0e-b79b-11f0-b074-4e013e2ddde4"],
-    1: ["https://mdulgqub5qnruwmfcpwepoza.agents.do-ai.run/api/v1/", "xoSn6Cj1ZSqQx2WT6D8CE0ve7pFQH2zA", "9df3fe1c-b73e-11f0-b074-4e013e2ddde4"],
-    2: ["https://zbuql743yhctfpohbo3q5uzh.agents.do-ai.run/api/v1/", "NdbK83I0xLWggjOptpi2QKMRjzi-c-l0", "3a21f241-b766-11f0-b074-4e013e2ddde4"],
-    3: ["https://wkexjvqzd224g5sajeqtxz2c.agents.do-ai.run/api/v1", "CmFZQU26pGQM6DVs46UkNzarw-6QcIPi", "7b715e82-b768-11f0-b074-4e013e2ddde4"]
-}
+# Load agent keys dynamically from environment
+AGENT_KEYS = {}
+for i in range(4):
+    url = os.getenv(f"AGENT_{i}_URL")
+    token = os.getenv(f"AGENT_{i}_TOKEN")
+    uuid = os.getenv(f"AGENT_{i}_UUID")
+    if url and token and uuid:
+        AGENT_KEYS[i] = [url, token, uuid]
 
 dict_of_agents = {1: "", 2: "", 3: ""}
 class Agent:
@@ -148,7 +154,8 @@ class Agent:
         if player_dictionary is not None:
             self.intialise_sus_dict(player_dictionary.keys()) 
         self.endpoint, self.access_key, agent_uuid = AGENT_KEYS[self.id]
-        agent_edit_client = pd.Client("dop_v1_f0969c014cdefd8aa84ce8611200470f9dd6d47bdaad7deb017192d6ce629737")
+        agent_edit_client = pd.Client(os.getenv("DO_API_KEY"))
+        print(prompt)
         agent_edit_client.genai.update_agent(agent_uuid, body={"instruction": prompt})
 
 
@@ -243,22 +250,3 @@ class Agent:
     
     def get_sus_dict(self) -> dict:
         return self.suspicionDictionary
-
-print(dict_of_agents)
-"""
-
-thomas_jefferson = Agent(1, "https://mdulgqub5qnruwmfcpwepoza.agents.do-ai.run/api/v1/", "xoSn6Cj1ZSqQx2WT6D8CE0ve7pFQH2zA", "9df3fe1c-b73e-11f0-b074-4e013e2ddde4", 0)
-response = thomas_jefferson.get_response("What is your name?")
-print(response)
-albert_einstein = Agent(3, "https://wkexjvqzd224g5sajeqtxz2c.agents.do-ai.run/api/v1", "CmFZQU26pGQM6DVs46UkNzarw-6QcIPi", 0)
-mlk = Agent(2, "https://zbuql743yhctfpohbo3q5uzh.agents.do-ai.run/api/v1/", "NdbK83I0xLWggjOptpi2QKMRjzi-c-l0", 0)
-mlk.check_suspicion(1, response)
-albert_einstein.check_suspicion(1, response)
-print(mlk.suspicionDictionary, albert_einstein.suspicionDictionary)
-question = mlk.generate_question(1, response)
-response = thomas_jefferson.get_response(question)
-print(question)
-print(response)
-mlk.check_suspicion(1, response)
-albert_einstein.check_suspicion(1, response)
-print(mlk.suspicionDictionary, albert_einstein.suspicionDictionary)"""

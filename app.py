@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 from agent import Agent
 from game import Game
+import random as r
+import json
 
 app = Flask(__name__)
 
 active_agents = {}
 active_games = {}
+user_message_count = {}
 
 @app.route("/")
 def index():
@@ -20,35 +23,35 @@ def chat():
     if not message or not persona:
         return jsonify({"agent": "System", "reply": "Missing message or persona"}), 400
 
+    # Track message count per persona
+    user_message_count[persona] = user_message_count.get(persona, 0) + 1
+
+    historical_figures = initialise_figures()
     persona_map = {
         "Thomas Jefferson": 0,
         "MLK": 1,
         "Albert Einstein": 2,
     }
-    hist_id = persona_map.get(persona)
+    i = r.randint(0,2)
+    agent = Agent(1, historical_figures[i][1])
+    response = agent.get_response(message)
 
-    # Create Agent and Game if not yet active
-    if persona not in active_agents:
-        active_agents[persona] = Agent(1, hist_id)
-        active_games[persona] = Game(persona)
+    # Check if it's time to prompt for the game
+    count = user_message_count[persona]
+    special_prompt = None
+    if count % 5 == 0:  # every 5 user messages
+        special_prompt = (
+            "🎯 You've sent 5 questions! Would you like to keep chatting or start the REAL game?"
+        )
 
-    agent = active_agents[persona]
-    game = active_games[persona]
+    return jsonify({"agent": persona, "reply": response, "specialPrompt": special_prompt})
 
-    # Step 1: Get game feedback
-    game_feedback = game.process_message(message)
 
-    # Step 2: Get agent response
-    try:
-        agent_reply = agent.get_response(message)
-    except Exception as e:
-        print("Agent error:", e)
-        agent_reply = "⚠️ Error connecting to agent."
+def initialise_figures():
+    with open("historical_figures.json", "r", encoding="utf-8") as js:
+        file = json.load(js)
+    return {int(key): value for key, value in file["Historical_figures"].items()}
 
-    # Step 3: Combine both into a single reply
-    full_reply = f"{agent_reply}\n\n🎮 {game_feedback}\n(Score: {game.score})"
-
-    return jsonify({"agent": persona, "reply": full_reply})
 
 if __name__ == "__main__":
     app.run(debug=True)
