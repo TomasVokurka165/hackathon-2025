@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify, render_template
-import os
-from agent import Agent  # placeholder agent logic
-from game import Game  # game logic placeholder
+from agent import Agent
+from game import Game
 
 app = Flask(__name__)
 
-# Temporary in-memory cache to store which persona is active
 active_agents = {}
+active_games = {}
 
 @app.route("/")
 def index():
@@ -21,7 +20,6 @@ def chat():
     if not message or not persona:
         return jsonify({"agent": "System", "reply": "Missing message or persona"}), 400
 
-    # --- Step 1: Map persona to the corresponding historical figure ID
     persona_map = {
         "Thomas Jefferson": 0,
         "MLK": 1,
@@ -29,27 +27,28 @@ def chat():
     }
     hist_id = persona_map.get(persona)
 
-    if hist_id is None:
-        return jsonify({"agent": "System", "reply": f"Persona {persona} not recognized."}), 400
-
-    # --- Step 2: Pick one of your DO endpoints (Agent 1/2/3)
-    # You can rotate or always use 1 for simplicity.
-    agent_id = 1  
-
-    # Create agent only once per session/persona
+    # Create Agent and Game if not yet active
     if persona not in active_agents:
-        active_agents[persona] = Agent(agent_id, hist_id)
+        active_agents[persona] = Agent(1, hist_id)
+        active_games[persona] = Game(persona)
 
     agent = active_agents[persona]
+    game = active_games[persona]
 
+    # Step 1: Get game feedback
+    game_feedback = game.process_message(message)
+
+    # Step 2: Get agent response
     try:
-        # --- Step 3: Get real response from DigitalOcean Agent
-        reply = agent.get_response(message)
+        agent_reply = agent.get_response(message)
     except Exception as e:
         print("Agent error:", e)
-        return jsonify({"agent": persona, "reply": "⚠️ Error connecting to agent."}), 500
+        agent_reply = "⚠️ Error connecting to agent."
 
-    return jsonify({"agent": persona, "reply": reply})
+    # Step 3: Combine both into a single reply
+    full_reply = f"{agent_reply}\n\n🎮 {game_feedback}\n(Score: {game.score})"
+
+    return jsonify({"agent": persona, "reply": full_reply})
 
 if __name__ == "__main__":
     app.run(debug=True)
