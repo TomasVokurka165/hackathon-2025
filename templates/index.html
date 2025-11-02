@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bridging Worlds: Deception Game</title>
+    <title>Beat the Agent</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
@@ -13,13 +13,31 @@
         <h1>Bridging Worlds: Deception Game</h1>
         <div id="chat" class="chat-box"></div>
 
+        <div id="onboardingModal" class="modal">
+            <div class="step" id="nicknameStep">
+                <input type="text" id="nicknameInput" placeholder="Enter your nickname" />
+                <button onclick="submitNickname()">Next</button>
+            </div>
+
+            <div class="step hidden" id="readyStep">
+                <p id="readyText"></p>
+                <button onclick="startGame('yes')">Yes</button>
+                <button onclick="startGame('scared')">I'm scared but yeah</button>
+                <button onclick="declineGame()">No</button>
+            </div>
+
+            <div class="step hidden" id="personaStep">
+                <p>Choose your persona:</p>
+                <div class="persona-options">
+                    <button onclick="choosePersona('Ada Lovelace')">Ada Lovelace</button>
+                    <button onclick="choosePersona('Nikola Tesla')">Nikola Tesla</button>
+                    <button onclick="choosePersona('Leonardo Da Vinci')">Leonardo Da Vinci</button>
+                    <button onclick="choosePersona('Cleopatra')">Cleopatra</button>
+                </div>
+            </div>
+        </div>
+
         <div class="input-area">
-            <select id="agentSelect">
-                <option value="ada">Ada Lovelace</option>
-                <option value="tesla">Nikola Tesla</option>
-                <option value="leonardo">Leonardo da Vinci</option>
-                <option value="cleopatra">Cleopatra</option>
-            </select>
             <input type="text" id="userInput" placeholder="Type your message..." />
             <button onclick="sendMessage()">Send</button>
         </div>
