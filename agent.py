@@ -2,6 +2,7 @@ import json
 import random
 from openai import OpenAI
 import pydo as pd
+import re
 
 # These are just exerimental, can be changed easily with new prompts for final product.
 # 0 - Thomas Jefferson
@@ -157,6 +158,20 @@ class Agent:
             "SuspicionDictionary": self.suspicionDictionary
         })
 
+    @staticmethod
+    def clean_ai_text(text):
+        # Replace markdown bold/italic with nothing
+        text = re.sub(r'\*{1,2}(.*?)\*{1,2}', r'\1', text)
+        # Replace markdown list bullets
+        text = re.sub(r'[*•\-]+', '•', text)
+        # Replace single newlines with spaces
+        text = re.sub(r'\n', ' ', text)
+        # Remove redundant spaces
+        text = re.sub(r'\s{2,}', ' ', text)
+        # Trim
+        text = text.strip()
+        return text
+
     def intialise_sus_dict(self, list_of_ids):
         if self.id != 0:
             for otherIds in list_of_ids:
@@ -181,7 +196,7 @@ class Agent:
 
         # Getting the content of the response.
         resp = response.choices[0].message.content
-        return resp
+        return self.clean_ai_text(resp)
 
     def check_suspicion(self, sus_id: int, message: str) -> None:
         client = self.connect_to_agent()

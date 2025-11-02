@@ -5,13 +5,8 @@ from game import Game  # game logic placeholder
 
 app = Flask(__name__)
 
-# Load environment variables
-DO_API_KEY = os.getenv("DO_API_KEY", "")
-DO_MODEL_URL = os.getenv("DO_MODEL_URL", "")
-MODEL_NAME = os.getenv("MODEL_NAME", "OpenAI GPT-oss-120b")
-
-# Initialize game object
-game = Game()
+# Temporary in-memory cache to store which persona is active
+active_agents = {}
 
 @app.route("/")
 def index():
@@ -20,37 +15,41 @@ def index():
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    user_message = data.get("message", "")
-    player_persona = data.get("playerPersona", "Player")
+    message = data.get("message", "")
+    persona = data.get("playerPersona")
 
-    # Build prompt for AI or use placeholder
-    prompt = f"You are {player_persona}. Respond in character to the following message:\n'{user_message}'"
+    if not message or not persona:
+        return jsonify({"agent": "System", "reply": "Missing message or persona"}), 400
 
-    if DO_API_KEY and DO_MODEL_URL:
-        import requests
-        headers = {
-            "Authorization": f"Bearer {DO_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        payload = {"model": MODEL_NAME, "input": prompt}
-        try:
-            response = requests.post(DO_MODEL_URL, headers=headers, json=payload)
-            response.raise_for_status()
-            ai_reply = response.json().get("output", "Sorry, I couldn't respond.")
-        except Exception as e:
-            ai_reply = f"[Error] Could not reach AI: {str(e)}"
-    else:
-        # Placeholder response for testing frontend without API keys
-        ai_reply = f"[Placeholder reply as {player_persona}] You said: '{user_message}'"
+    # --- Step 1: Map persona to the corresponding historical figure ID
+    persona_map = {
+        "Thomas Jefferson": 0,
+        "MLK": 1,
+        "Albert Einstein": 2,
+    }
+    hist_id = persona_map.get(persona)
 
-    return jsonify({"agent": player_persona, "reply": ai_reply})
+    if hist_id is None:
+        return jsonify({"agent": "System", "reply": f"Persona {persona} not recognized."}), 400
 
-@app.route("/select_persona", methods=["POST"])
-def select_persona():
-    data = request.get_json()
-    persona = data.get("persona")
-    game.set_player_persona(persona)
-    return jsonify({"status": "ok", "persona": persona})
+    # --- Step 2: Pick one of your DO endpoints (Agent 1/2/3)
+    # You can rotate or always use 1 for simplicity.
+    agent_id = 1  
+
+    # Create agent only once per session/persona
+    if persona not in active_agents:
+        active_agents[persona] = Agent(agent_id, hist_id)
+
+    agent = active_agents[persona]
+
+    try:
+        # --- Step 3: Get real response from DigitalOcean Agent
+        reply = agent.get_response(message)
+    except Exception as e:
+        print("Agent error:", e)
+        return jsonify({"agent": persona, "reply": "⚠️ Error connecting to agent."}), 500
+
+    return jsonify({"agent": persona, "reply": reply})
 
 if __name__ == "__main__":
     app.run(debug=True)

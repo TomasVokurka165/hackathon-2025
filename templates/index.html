@@ -4,42 +4,53 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beat the Agent</title>
+    <title>Bridging Worlds: Deception Game</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 
 <body>
-    <div class="container">
-        <h1>Bridging Worlds: Deception Game</h1>
-        <div id="chat" class="chat-box"></div>
-
-        <div id="onboardingModal" class="modal">
+    <!-- Onboarding Modal -->
+    <div id="onboardingModal" class="modal">
+        <div class="modal-content slide-up">
             <div class="step" id="nicknameStep">
+                <h2>Welcome, Challenger</h2>
+                <p>Enter your nickname to begin your mission.</p>
                 <input type="text" id="nicknameInput" placeholder="Enter your nickname" />
-                <button onclick="submitNickname()">Next</button>
+                <button onclick="submitNickname()">Continue</button>
             </div>
 
             <div class="step hidden" id="readyStep">
+                <h2>Ready for the Challenge?</h2>
                 <p id="readyText"></p>
-                <button onclick="startGame('yes')">Yes</button>
-                <button onclick="startGame('scared')">I'm scared but yeah</button>
-                <button onclick="declineGame()">No</button>
+                <div class="button-group">
+                    <button class="yes" onclick="startGame('yes')">Yes, let's go</button>
+                    <button class="maybe" onclick="startGame('scared')">I'm nervous but ready</button>
+                    <button class="no" onclick="declineGame()">Not now</button>
+                </div>
             </div>
 
             <div class="step hidden" id="personaStep">
-                <p>Choose your persona:</p>
+                <h2>Choose Your Persona</h2>
+                <p>Select a legendary mind to embody:</p>
                 <div class="persona-options">
-                    <button onclick="choosePersona('Ada Lovelace')">Ada Lovelace</button>
-                    <button onclick="choosePersona('Nikola Tesla')">Nikola Tesla</button>
-                    <button onclick="choosePersona('Leonardo Da Vinci')">Leonardo Da Vinci</button>
-                    <button onclick="choosePersona('Cleopatra')">Cleopatra</button>
+                    <button onclick="choosePersona('Thomas Jefferson')">🏛 Thomas Jefferson</button>
+                    <button onclick="choosePersona('MLK')">✊🏾 Martin Luther King Jr.</button>
+                    <button onclick="choosePersona('Albert Einstein')">🧠 Albert Einstein</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Type your message..." />
-            <button onclick="sendMessage()">Send</button>
+    <!-- Chat Container -->
+    <div class="container fade-in">
+        <h1>🧠 Bridging Worlds: Deception Game</h1>
+        <p class="subtitle">Outsmart the agents. Stay in character. Survive the deception.</p>
+
+        <div id="chat" class="chat-box"></div>
+
+        <div class="input-area fade-in-delayed">
+            <input type="text" id="userInput" placeholder="What's on your mind?" />
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 
