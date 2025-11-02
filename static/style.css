@@ -75,12 +75,19 @@ h1 {
   background: linear-gradient(135deg, #6b2c2a, #a52a2a);
   color: #fff;
   border-bottom-right-radius: 2px;
+  text-align: right;
+  justify-content: center;
 }
 
 .agent .bubble {
   background: linear-gradient(135deg, #ffcf9c, #f7b267);
   color: #3b2f2f;
   border-bottom-left-radius: 2px;
+  text-align: left;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  justify-content: center;
 }
 
 .system {
