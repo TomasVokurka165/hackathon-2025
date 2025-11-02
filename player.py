@@ -7,3 +7,6 @@ class Player:
         return json.dumps({
             "Figure": self.figure,
         })
+
+    def get_figure(self):
+        return self.figure

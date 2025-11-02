@@ -8,6 +8,7 @@ import pydo as pd
 # 1 - MLK
 # 2 - Einstein
 converter = {
+    99: ["Host", ""],
     0: ["Thomas Jefferson", """
         Role: You are Thomas Jefferson, Founding Father of the United States, principal author of the Declaration of Independence, and the 3rd President (1801–1809). You are participating in a social deduction game where all participants must determine who among them is not a real historical person.
 
@@ -131,6 +132,7 @@ converter = {
 }
 
 AGENT_KEYS = {
+    0: ["https://awmc2b5zi5cltaseweuegscu.agents.do-ai.run/api/v1", "6SWrCFxCYUleR-gxE_42SMpOethEXU2S", "546ece0e-b79b-11f0-b074-4e013e2ddde4"],
     1: ["https://mdulgqub5qnruwmfcpwepoza.agents.do-ai.run/api/v1/", "xoSn6Cj1ZSqQx2WT6D8CE0ve7pFQH2zA", "9df3fe1c-b73e-11f0-b074-4e013e2ddde4"],
     2: ["https://zbuql743yhctfpohbo3q5uzh.agents.do-ai.run/api/v1/", "NdbK83I0xLWggjOptpi2QKMRjzi-c-l0", "3a21f241-b766-11f0-b074-4e013e2ddde4"],
     3: ["https://wkexjvqzd224g5sajeqtxz2c.agents.do-ai.run/api/v1", "CmFZQU26pGQM6DVs46UkNzarw-6QcIPi", "7b715e82-b768-11f0-b074-4e013e2ddde4"]
@@ -138,13 +140,15 @@ AGENT_KEYS = {
 
 dict_of_agents = {1: "", 2: "", 3: ""}
 class Agent:
-    def __init__(self, id: int, hist_id: int) -> None:
+    def __init__(self, id: int, prompt: str, player_dictionary: dict = None) -> None:
         self.id = id
         self.suspicionDictionary = {}
-        self.intialise_sus_dict(dict_of_agents.keys())
+        self.player_dictionary = player_dictionary
+        if player_dictionary is not None:
+            self.intialise_sus_dict(player_dictionary.keys()) 
         self.endpoint, self.access_key, agent_uuid = AGENT_KEYS[self.id]
         agent_edit_client = pd.Client("dop_v1_f0969c014cdefd8aa84ce8611200470f9dd6d47bdaad7deb017192d6ce629737")
-        agent_edit_client.genai.update_agent(agent_uuid, body={"instruction": converter[hist_id][1]})
+        agent_edit_client.genai.update_agent(agent_uuid, body={"instruction": prompt})
 
 
     def __repr__(self):
@@ -154,9 +158,11 @@ class Agent:
         })
 
     def intialise_sus_dict(self, list_of_ids):
-        for otherIds in list_of_ids:
-            if otherIds != self.id:
-                self.suspicionDictionary[otherIds] = [0, []]
+        if self.id != 0:
+            for otherIds in list_of_ids:
+                if otherIds != self.id:
+                    self.suspicionDictionary[otherIds] = [0, []]
+        print(self.suspicionDictionary)
 
     def connect_to_agent(self) -> OpenAI:
         # Connect to the Agent.
@@ -181,8 +187,9 @@ class Agent:
         client = self.connect_to_agent()
 
         # Store variables of the current sus_value and sus_reasons (and name) of sus_id.
+        print(sus_id, self.suspicionDictionary[sus_id])
         sus_value, sus_reasons = self.suspicionDictionary[sus_id]
-        name = dict_of_agents[sus_id]
+        name = self.player_dictionary[sus_id][0]
         response = client.chat.completions.create(
             model ="n/a",
             messages = [{"role": "user", "content": f"""Generate a suspicion rating and suspicions for {name} given the following message: {message}. 
@@ -202,12 +209,12 @@ class Agent:
         self.suspicionDictionary[sus_id][0] = resp[0]
         self.suspicionDictionary[sus_id][1].append(resp[1])
 
-    def generate_question(self, agent_id, previous_question):
+    def generate_question(self, agent_id):
         client = self.connect_to_agent()
-        name = dict_of_agents[agent_id]
+        name = self.player_dictionary[agent_id][0]
         response = client.chat.completions.create(
             model="n/a",
-            messages=[{"role": "user", "content": f"""Generate a question for {name}. {name}'s previous response was {previous_question}, use this with some context. 
+            messages=[{"role": "user", "content": f"""Generate a question for {name}.
                        Remember that your overall suspicion for this person is {self.suspicionDictionary[agent_id]}. The question should be relevent to {name}. 
                        It should also not be too long and should be a single question."""}]
         )
@@ -219,14 +226,10 @@ class Agent:
         weights = list(self.suspicionDictionary.values())[0]
         return random.choices(players, weights=weights, k=1)[0]
     
-called_figures = []
-for i in range(1, 4):
-    randi = random.randint(0,2)
-    while randi in called_figures:
-        randi = random.randint(0,2)   
-    called_figures.append(randi)
-    dict_of_agents[i] = [converter[randi], Agent(i, randi)]
+    def get_sus_dict(self) -> dict:
+        return self.suspicionDictionary
 
+print(dict_of_agents)
 """
 
 thomas_jefferson = Agent(1, "https://mdulgqub5qnruwmfcpwepoza.agents.do-ai.run/api/v1/", "xoSn6Cj1ZSqQx2WT6D8CE0ve7pFQH2zA", "9df3fe1c-b73e-11f0-b074-4e013e2ddde4", 0)
