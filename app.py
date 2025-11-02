@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from agent import Agent
 from game import Game
-import random as r
 import json
 
 app = Flask(__name__)
@@ -32,8 +31,7 @@ def chat():
         "MLK": 1,
         "Albert Einstein": 2,
     }
-    i = r.randint(0,2)
-    agent = Agent(1, historical_figures[i][1])
+    agent = Agent(1, historical_figures[persona_map[persona]][1])
     response = agent.get_response(message)
 
     # Check if it's time to prompt for the game
