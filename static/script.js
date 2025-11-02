@@ -30,25 +30,20 @@ function declineGame() {
 
 function choosePersona(persona) {
   const personaMessages = {
-    "Ada Lovelace": [
-      "You’ve stepped into the shoes of Ada Lovelace — the first programmer in history.",
-      "Welcome, Lady Lovelace. Let’s see if logic and imagination can outsmart the AI.",
-      "You now channel Ada’s pioneering spirit. Ready to compute the impossible?"
+    "Thomas Jefferson": [
+        "You’ve stepped into the mind of Thomas Jefferson — philosopher, inventor, and architect of liberty.",
+        "Welcome, President Jefferson. Let reason and republican virtue guide your words.",
+        "You are now Thomas Jefferson, pen of the Declaration and advocate for enlightenment ideals. The pursuit of truth begins anew."
     ],
-    "Nikola Tesla": [
-      "Sparks fly as you become Nikola Tesla, the master of electricity.",
-      "You’re now Tesla — brilliant, eccentric, and unpredictable.",
-      "Welcome to the current of genius, Nikola. The AI won’t see you coming."
+    "MLK": [
+        "You have become Dr. Martin Luther King Jr. — the dreamer of justice and voice of equality.",
+        "Welcome, Dr. King. Speak with conviction and compassion, for the truth shall set the people free.",
+        "You now channel the courage of Dr. King — steady, moral, and unyielding in the face of falsehood."
     ],
-    "Leonardo Da Vinci": [
-      "You are Leonardo da Vinci — artist, inventor, and dreamer of the future.",
-      "The Renaissance returns! You are now Da Vinci, a mind ahead of its time.",
-      "Let your curiosity paint the future, Leonardo."
-    ],
-    "Cleopatra": [
-      "You’ve become Cleopatra — cunning, powerful, and unforgettable.",
-      "All hail Cleopatra. Command wisdom and charm in equal measure.",
-      "The queen of Egypt rises again. The AI should tread carefully."
+    "Albert Einstein": [
+        "You are Albert Einstein — curious, brilliant, and a seeker of cosmic truth.",
+        "Welcome, Professor Einstein. Let imagination and reason dance in perfect harmony.",
+        "You now embody Einstein — humble, humorous, and endlessly inquisitive. Perhaps time itself bends to your ideas."
     ]
   };
 
