@@ -45,6 +45,18 @@ def chat():
 
     return jsonify({"agent": player_persona, "reply": ai_reply})
 
+
+@app.route("/send_user_response", methods=["POST"])
+def send_user_response():
+    data = request.get_json()
+    response = data.get("response")
+    return jsonify({"status": "ok"})
+
+@app.route("show_agent_response", methods=["GET"])
+def show_agent_response():
+    data = request.get_json
+    return jsonify({"status": "ok", "message": message})
+
 @app.route("/select_persona", methods=["POST"])
 def select_persona():
     data = request.get_json()
@@ -54,3 +66,5 @@ def select_persona():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
