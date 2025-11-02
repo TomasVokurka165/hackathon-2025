@@ -23,27 +23,8 @@ def chat():
     user_message = data.get("message", "")
     player_persona = data.get("playerPersona", "Player")
 
-    # Build prompt for AI or use placeholder
-    prompt = f"You are {player_persona}. Respond in character to the following message:\n'{user_message}'"
-
-    if DO_API_KEY and DO_MODEL_URL:
-        import requests
-        headers = {
-            "Authorization": f"Bearer {DO_API_KEY}",
-            "Content-Type": "application/json"
-        }
-        payload = {"model": MODEL_NAME, "input": prompt}
-        try:
-            response = requests.post(DO_MODEL_URL, headers=headers, json=payload)
-            response.raise_for_status()
-            ai_reply = response.json().get("output", "Sorry, I couldn't respond.")
-        except Exception as e:
-            ai_reply = f"[Error] Could not reach AI: {str(e)}"
-    else:
-        # Placeholder response for testing frontend without API keys
-        ai_reply = f"[Placeholder reply as {player_persona}] You said: '{user_message}'"
-
-    return jsonify({"agent": player_persona, "reply": ai_reply})
+    reply = f"Interesting, {player_persona}. You said: '{user_message}' - care to elaborate?"
+    return jsonify({"agent": player_persona, "reply": reply})
 
 @app.route("/select_persona", methods=["POST"])
 def select_persona():
